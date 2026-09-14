@@ -1,4 +1,3 @@
-import { Timestamp } from "mongodb";
 import mongoose from "mongoose";
 
 const schema = mongoose.Schema;
@@ -12,7 +11,7 @@ const userSchema = schema({
     profilePicture: String
   },
 },
-  { Timestamp: true },
+  { timestamps: true },
 );
 
 export default mongoose.model("User", userSchema);

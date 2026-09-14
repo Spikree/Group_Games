@@ -1,5 +1,5 @@
 import User from "../models/user.mode";
-import argon2, { hash } from "argon2";
+import argon2 from "argon2";
 import fs from "fs";
 import { generateToken } from "../libs/jsonWebToken";
 import cloudinary from "../libs/cloudinary";
