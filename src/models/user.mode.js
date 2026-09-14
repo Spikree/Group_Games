@@ -1,7 +1,7 @@
 import { Timestamp } from "mongodb";
 import mongoose from "mongoose";
 
-const schema = mongoose.schema;
+const schema = mongoose.Schema;
 
 const userSchema = schema({
   userName: { type: String, required: true, unique: true },
