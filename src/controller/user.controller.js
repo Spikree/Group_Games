@@ -1,8 +1,8 @@
-import User from "../models/user.mode";
+import User from "../models/user.mode.js";
 import argon2 from "argon2";
 import fs from "fs";
-import { generateToken } from "../libs/jsonWebToken";
-import cloudinary from "../libs/cloudinary";
+import { generateToken } from "../libs/jsonWebToken.js";
+import cloudinary from "../libs/cloudinary.js";
 
 export const register = async (req, res) => {
   const { userName, password, name, bio } = req.body;
@@ -66,7 +66,7 @@ export const register = async (req, res) => {
         });
     }
 
-    console.log("Error in register user controller", e.message);
+    console.log("Error in register user controller", e.message, e);
     return res.status(500).json({
       message: "Internal Server Error"
     });
@@ -102,7 +102,7 @@ export const login = async (req, res) => {
     generateToken(user._id, res);
 
     return res.status(200).json({
-      message: "Logged In"
+      message: "Logged In Successfully"
     });
   } catch (e) {
     console.log("error in login auth controller", e.message);
