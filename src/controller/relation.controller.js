@@ -126,7 +126,7 @@ export const makeAdmin = async (req, res) => {
       message: `${userToPromote.userName} Promoted To Admin`
     });
   } catch (e) {
-    console.log("Error in ", e.message);
+    console.log("Error in makeAdmin", e.message);
     return res.status(500).json({
       message: "Internal Server Error"
     });
@@ -180,11 +180,73 @@ export const DemoteFromAdmin = async (req, res) => {
       message: `${userToDemote.userName} Demoted`
     });
   } catch (e) {
-    console.log("Error in ", e.message);
+    console.log("Error in DemoteFromAdmin", e.message);
     return res.status(500).json({
       message: "Internal Server Error"
     });
   }
 }
 
-// TODO : ADD A CONTROLLER TO REMOVE USER FROM A GROUP
+export const removeFromGroup = async (req,res) => {
+  const { userId, groupId } = req.body;
+
+  if (!userId || !groupId) {
+    return res.status(400).json({
+      message: "Invalid Request"
+    });
+  }
+
+  const currUser = req.user;
+
+  try {
+
+    const groupToRemoveFrom = await Group.findById(groupId);
+
+    if (!groupToRemoveFrom) {
+      return res.status(404).json({
+        message: "Group Not Found"
+      });
+    }
+
+    const canKick =
+          groupToRemoveFrom.groupOwner.equals(currUser._id) ||
+          groupToRemoveFrom.admins.some((id) => id.equals(currUser._id));
+
+    if (!canKick) {
+      return res.status(403).json({
+        message: "Not Allowed, You Are Not An Admin Or The Owner"
+      });
+    }
+
+    const userToKick = await User.findById(userId);
+
+    if (!userToKick) {
+      return res.status(404).json({
+        message: "User Not Found"
+      });
+    }
+
+    if (groupToRemoveFrom.groupOwner.equals(userId)) {
+      return res.status(400).json({
+        message: "Cannot Remove The Group Owner"
+      });
+    }
+
+    if (!groupToRemoveFrom.groupOwner.equals(currUser._id) && groupToRemoveFrom.admins.some((id) => id.equals(userId))) {
+      return res.status(400).json({
+        message: "Only Owner Can Kick A Admin"
+      });
+    }
+
+    await groupToRemoveFrom.updateOne({ $pull: { members: userId, admins: userId } });
+
+    return res.status(200).json({
+      message: `${userToKick.userName} Removed From The Group`
+    });
+  } catch (e) {
+    console.log("Error in removeFromGroup", e.message);
+    return res.status(500).json({
+      message: "Internal Server Error"
+    });
+  }
+}
