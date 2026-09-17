@@ -3,8 +3,11 @@ import mongoose from "mongoose";
 const schema = mongoose.Schema;
 
 const groupSchema = schema({
-  groupName: { type: String, required: true, unique: true },
-  groupLogo: {type: String},
+  groupName: { type: String, required: true },
+  groupDescription: { type: String },
+  groupLogo: { type: String },
+  inviteCode: { type: String, required: true, unique: true, index: true },
+  isPrivate: { type: Boolean, required: true, default: true },
   groupOwner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
