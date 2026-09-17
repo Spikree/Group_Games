@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/user.mode';
+import User from '../models/user.mode.js';
 
 const verifyToken = async (req, res, next) => {
   try {
@@ -32,7 +32,7 @@ const verifyToken = async (req, res, next) => {
 
     next();
   } catch (e) {
-    console.log("error in verifyToken middleware",error)
+    console.log("error in verifyToken middleware",e.message)
     res.status(500).json({
       message: "Invalid User"
     });
