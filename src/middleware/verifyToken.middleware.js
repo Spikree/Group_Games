@@ -3,8 +3,14 @@ import User from '../models/user.mode.js';
 
 const verifyToken = async (req, res, next) => {
   try {
-    const token = await req.cookie.token;
 
+    const token = await req.cookies?.token;
+
+    if (!token) {
+      return res.status(400).json({
+        message: "Not Authenticated"
+      });
+    }
 
     if (!token) {
       return res.status(401).json({

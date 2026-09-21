@@ -5,6 +5,7 @@ import connectDb from "./libs/connectToDb.js";
 import cookieParser from "cookie-parser"
 
 import UserRouter from "./routes/user.route.js"
+import RelationRoute from "./routes/relation.route.js"
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 });
 
 app.use("/user", UserRouter);
+app.use("/relations", RelationRoute);
 
 app.listen(port, () => {
   console.log(`backend running on port ${port}`);
